@@ -1,5 +1,6 @@
 const tmi = require("tmi.js");
 require('dotenv').config();
+
 // Define configuration options
 const opts = {
   identity: {
@@ -19,6 +20,7 @@ client.on("connected", onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
+
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) {
@@ -29,23 +31,28 @@ function onMessageHandler(target, context, msg, self) {
   const commandName = msg.trim();
 
   // If the command is known, let's execute it
-  if (commandName === "安安") {
-    const num = rollDice(commandName);
-    client.say(
-      target,
-      "安安 xinyaaJB"
-    );
+  if (commandName === "確實" || count === 10) {
+   
+    saySometing(target);
+    count = 0;
     console.log(`* Executed ${commandName} command`);
   } else {
-    console.log(`* Unknown command ${commandName}`);
+    count ++;
+    console.log(`* Unknown say ${commandName}`);
   }
 }
 
-// Function called when the "dice" command is issued
-function rollDice() {
-  const sides = 20;
-  return Math.floor(Math.random() * sides) + 1;
+var respond = ["確實","亂講","冷靜","真假"];
+
+function saySometing(target) {
+  client.say(
+    target,
+    `${respond[Math.floor(Math.random()*4)]} `
+  );
 }
+
+
+
 
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
